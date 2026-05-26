@@ -1,0 +1,42 @@
+# Chroma DB
+chroma_db/
+chroma.sqlite3
+*.bin
+
+# Logs
+logs/
+*.log
+
+# Python
+__pycache__/
+*.pyc
+
+# Environment Variables
+.env
+
+# Virtual Environments
+venv/
+env/
+agent-flow-env/
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
+
+# FastAPI / Render
+*.sqlite3
+
+# Build Files
+dist/
+build/
+
+# Temporary Files
+temp/
+tmp/

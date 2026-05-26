@@ -1,0 +1,13 @@
+streamlit
+langgraph
+langchain
+langchain-openai
+langchain-chroma
+langchain-text-splitters
+python-dotenv
+pydantic
+chromadb
+fastapi
+uvicorn
+python-multipart
+requests
