@@ -50,6 +50,17 @@ with st.sidebar:
         "Multi-Agent Research Platform"
     )
 
+    st.info(
+        """
+        Workflow:
+        
+        Query → Planner Agent
+        → Retriever Agent
+        → Research Agent
+        → Fallback Logic
+        """
+    )
+
     st.divider()
 
     st.subheader(
@@ -85,9 +96,18 @@ with st.sidebar:
             st.session_state.history
         ):
 
+            display_text = (
+
+                item[:60] + "..."
+
+                if len(item) > 60
+
+                else item
+            )
+
             if st.button(
 
-                f"{idx + 1}. {item}",
+                f"{idx + 1}. {display_text}",
 
                 key=f"history_{idx}"
             ):
@@ -99,8 +119,6 @@ with st.sidebar:
         st.info(
             "No research runs yet"
         )
-
-    
 
 
 # =========================
@@ -127,7 +145,9 @@ if st.button("Run Research"):
     if query:
 
         with st.spinner(
-            "Running multi-agent workflow..."
+
+            "Planner Agent → Retriever Agent "
+            "→ Research Agent running..."
         ):
 
             try:
@@ -196,6 +216,11 @@ Final Answer
 {result["final_answer"]}
 
 
+Sources
+--------
+{result["sources"]}
+
+
 Confidence
 -----------
 {result["confidence"]}
@@ -211,45 +236,149 @@ Confidence
                     "Research Completed"
                 )
 
-                st.subheader(
-                    "Refined Query"
+                # =========================
+                # Metrics Row
+                # =========================
+
+                fallback_used = (
+
+                    "Fallback response generated"
+
+                    in result["research_notes"]
                 )
 
-                st.write(
-                    result["refined_query"]
+                col1, col2, col3 = st.columns(3)
+
+                col1.metric(
+                    "Documents Retrieved",
+                    3
                 )
 
-                st.subheader(
-                    "Retrieved Context"
-                )
-
-                st.write(
-                    result["retrieved_context"]
-                )
-
-                st.subheader(
-                    "Research Notes"
-                )
-
-                st.write(
-                    result["research_notes"]
-                )
-
-                st.subheader(
-                    "Final Answer"
-                )
-
-                st.write(
-                    result["final_answer"]
-                )
-
-                st.subheader(
-                    "Confidence"
-                )
-
-                st.write(
+                col2.metric(
+                    "Confidence",
                     result["confidence"]
                 )
+
+                col3.metric(
+
+                    "Fallback Used",
+
+                    "Yes" if fallback_used else "No"
+                )
+
+                st.divider()
+
+                # =========================
+                # Refined Query
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Refined Query"
+                    )
+
+                    st.write(
+                        result["refined_query"]
+                    )
+
+                # =========================
+                # Retrieved Context
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Retrieved Context"
+                    )
+
+                    with st.expander(
+                        "View Retrieved Context"
+                    ):
+
+                        st.write(
+                            result["retrieved_context"]
+                        )
+
+                # =========================
+                # Research Notes
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Research Notes"
+                    )
+
+                    st.write(
+                        result["research_notes"]
+                    )
+
+                # =========================
+                # Final Answer
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Final Answer"
+                    )
+
+                    st.write(
+                        result["final_answer"]
+                    )
+
+                # =========================
+                # Sources
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Sources"
+                    )
+
+                    with st.expander(
+                        "View Sources"
+                    ):
+
+                        st.write(
+                            result["sources"]
+                        )
+
+                # =========================
+                # Confidence
+                # =========================
+
+                with st.container(border=True):
+
+                    st.subheader(
+                        "Confidence"
+                    )
+
+                    confidence = result["confidence"]
+
+                    if confidence == "High":
+
+                        st.success(
+                            "High Confidence"
+                        )
+
+                    elif confidence == "Medium":
+
+                        st.warning(
+                            "Medium Confidence"
+                        )
+
+                    else:
+
+                        st.error(
+                            "Low Confidence"
+                        )
+
+                # =========================
+                # Download Report
+                # =========================
 
                 st.divider()
 

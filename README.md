@@ -1,49 +1,32 @@
 # 🧠 AgentFlow API — Multi-Agent Research Platform
 
-A production-oriented multi-agent AI research platform built using FastAPI, LangGraph, RAG, and ChromaDB.
+A scalable multi-agent AI research platform built using FastAPI, LangGraph, RAG, OpenAI embeddings, and ChromaDB.
 
-This system performs intelligent research using a structured multi-agent workflow and Retrieval-Augmented Generation (RAG), delivering context-aware and reliable responses through a scalable API-first architecture.
+This system performs intelligent research using a structured multi-agent workflow and Retrieval-Augmented Generation (RAG), delivering context-aware and reliable responses through a maintainable API-first architecture.
+
+The platform also includes hybrid RAG + LLM fallback handling, enabling graceful response generation even when retrieval quality is weak or insufficient.
 
 ---
 
 # 🚀 Overview
 
-This system uses a multi-agent architecture to process user queries through multiple stages:
+This system uses a modular multi-agent architecture to process user research queries through multiple intelligent stages:
 
 1. Planner Agent → Refines user query  
-2. Retriever Agent → Fetches relevant context using RAG  
+2. Retriever Agent → Performs semantic retrieval using ChromaDB  
 3. Research Agent → Generates structured research notes  
-4. Answer Generator → Produces final response with confidence and sources  
+4. Retrieval Quality Check → Detects weak retrieval scenarios  
+5. Fallback Logic → Uses LLM general reasoning if retrieval is insufficient  
+6. Final Response Generator → Produces final answer with confidence and sources  
 
 The system is designed with:
 
 - scalability
-- modularity
 - observability
 - structured outputs
-- production-oriented architecture
-
----
-
-# 🏗️ Updated Architecture
-
-```text
-Frontend (Streamlit)
-        ↓
-FastAPI Backend
-        ↓
-LangGraph Workflow
-        ↓
-Planner Agent
-        ↓
-Retriever Agent (RAG)
-        ↓
-Research Agent
-        ↓
-Answer Generator
-        ↓
-Structured Response
-```
+- reliability
+- modular AI architecture
+- semantic retrieval pipelines
 
 ---
 
@@ -51,95 +34,156 @@ Structured Response
 
 ![Architecture](assets/architecture_diagram.png)
 
----
+The system follows a modular multi-agent RAG architecture with:
 
-# 🔄 Workflow
+- Streamlit Frontend
+- FastAPI Backend
+- LangGraph Workflow Engine
+- Planner Agent
+- Retriever Agent (RAG)
+- Research Agent
+- Retrieval Quality Validation
+- Fallback LLM Logic
+- Final Structured Output
 
-1. User submits research query through Streamlit UI  
-2. Frontend sends API request to FastAPI backend  
-3. Planner agent refines the query  
-4. Retriever fetches relevant context using ChromaDB + embeddings  
-5. Research agent generates structured notes  
-6. Answer generator produces final response  
-7. System returns:
-   - refined query
-   - retrieved context
-   - research notes
-   - final answer
-   - confidence score
-   - sources
+The workflow supports semantic retrieval, multi-document reasoning, confidence-aware validation, and fallback response generation.
 
 ---
 
-# 🧠 Production-Oriented Features
+
+# 🧠 Core Features
 
 ## ✅ Multi-Agent Workflow
 
-Built using LangGraph with modular agent orchestration.
+Built using LangGraph with modular agent orchestration and scalable workflow design.
 
 ---
 
-## ✅ RAG Pipeline
+## ✅ Multi-Document RAG Pipeline
 
-Uses:
+Supports extensible semantic retrieval across multiple PDF documents using:
+
 - ChromaDB
 - OpenAI embeddings
-- semantic retrieval
+- semantic vector search
+- metadata-aware retrieval
 
-for context-grounded responses.
+The system automatically ingests multiple PDF knowledge sources and performs contextual retrieval across all documents.
+
+---
+
+## ✅ Hybrid RAG + LLM Fallback Architecture
+
+Implements production-style fallback handling for weak retrieval scenarios.
+
+If semantic retrieval does not contain sufficient context:
+
+- retrieval quality is detected
+- fallback reasoning is triggered
+- LLM general knowledge is used
+- graceful response generation is maintained
+
+This prevents hard failures such as:
+
+```text
+"No relevant information found"
+```
+
+and creates a more reliable AI assistant experience.
 
 ---
 
 ## ✅ FastAPI Backend
 
 Production-style backend architecture using FastAPI:
+
 - REST API endpoints
 - frontend/backend separation
-- scalable deployment architecture
+- extensible deployment architecture
+- API-first workflow design
 
 ---
 
 ## ✅ Structured Output Validation
 
 Uses:
+
 - Pydantic schemas
 - JSON validation
 - safe parsing utilities
 
-to ensure reliable outputs.
+to ensure reliable structured AI outputs.
 
 ---
 
 ## ✅ Retry Mechanism
 
 Implements:
+
 - retry with stricter prompts
 - malformed JSON handling
-- fallback responses
+- structured parsing recovery
 
-for robust AI generation.
+for robust AI generation reliability.
 
 ---
 
 ## ✅ Logging & Observability
 
 Includes:
-- workflow logging
-- error tracking
-- debugging support
 
-through centralized logger utilities.
+- workflow logging
+- centralized logger utilities
+- debugging support
+- error tracking
+
+for production-style observability.
+
+---
+
+## ✅ Confidence-Aware Responses
+
+The platform generates retrieval-aware confidence indicators based on:
+
+- retrieval quality
+- response grounding
+- fallback usage
+- structured validation
+
+This creates more reliable and explainable AI outputs.
+
+---
+
+## ✅ Enhanced Frontend Experience
+
+The Streamlit frontend includes:
+
+- sample research questions
+- workflow visualization
+- run history tracking
+- metrics dashboard
+- fallback indicators
+- downloadable research reports
+- expandable retrieved context
+- confidence visualization
+
+for a cleaner and more professional product experience.
 
 ---
 
 # 🌟 Highlights
 
-- Designed production-oriented multi-agent AI architecture
-- Implemented RAG pipeline with persistent ChromaDB
-- Built FastAPI backend for scalable API-first deployment
-- Developed structured output system with validation and retries
-- Added observability through centralized logging
-- Created end-to-end AI research platform with Streamlit frontend
+- Designed modular multi-agent AI architecture
+- Implemented robust multi-document RAG pipeline
+- Added hybrid retrieval + fallback reasoning workflow
+- Built semantic retrieval system using ChromaDB
+- Integrated OpenAI embeddings for vector search
+- Developed FastAPI backend for scalable API-first deployment
+- Added confidence-aware response handling
+- Implemented structured output validation and retries
+- Added workflow observability through centralized logging
+- Built interactive Streamlit research interface
+- Created end-to-end AI research orchestration platform
 
 ---
 
@@ -156,7 +200,7 @@ through centralized logger utilities.
 
 ---
 
-# 📂 Final Project Structure
+# 📂 Project Structure
 
 ```text
 agentflow-api/
@@ -198,6 +242,8 @@ agentflow-api/
 - What are the risks of AI adoption in enterprises?
 - How is generative AI used in customer support?
 - Explain differences between vector databases and relational databases
+- What are the challenges in large-scale multi-agent architectures?
+- How do enterprise AI agent systems coordinate workflows?
 
 ---
 
@@ -217,7 +263,7 @@ Retrieval-Augmented Generation (RAG) improves LLM performance by retrieving rele
 
 ## Confidence
 
-0.92
+High
 
 ---
 
@@ -248,13 +294,13 @@ Retrieval-Augmented Generation (RAG) improves LLM performance by retrieving rele
 
 ---
 
-## 📄 JSON Export
+## 📄 Downloadable Research Report
 
-![JSON](assets/json_export.png)
+![Report](assets/json_export.png)
 
 ---
 
-## 🕘 Run History
+## 🕘 Run History & Workflow Sidebar
 
 ![History](assets/run_history.png)
 
@@ -265,8 +311,9 @@ Retrieval-Augmented Generation (RAG) improves LLM performance by retrieving rele
 ## 1️⃣ Clone Repository
 
 ```bash
-git clone https://github.com/smrutilale21/agentflow-api.git
-cd agentflow-api
+git clone https://github.com/smrutilale21/agentflow-multi-agent-rag-system
+
+cd agentflow-multi-agent-rag-system
 ```
 
 ---
@@ -359,29 +406,37 @@ BACKEND_URL=https://your-render-url.onrender.com/research
 - `.env` is ignored for security
 - Logs are stored locally
 - Frontend and backend are independently deployable
-- Existing production logic remains unchanged
+- Existing production workflow remains modular and extensible
+- Multi-document ingestion is supported automatically
+- Retrieval-aware fallback handling improves robustness
 
 ---
 
 # 🔮 Future Improvements
 
-- Hybrid retrieval
-- Web search integration
-- Conversational memory
-- Evaluation metrics
+- Retrieval reranking
+- Streaming responses
+- Dynamic PDF uploads
+- Authentication system
+- Redis caching
+- Async background processing
+- Advanced evaluation metrics
 - React frontend migration
 
 ---
 
 # 📌 Conclusion
 
-AgentFlow API demonstrates a production-oriented implementation of:
+AgentFlow API demonstrates a robust implementation of:
 
 - multi-agent AI systems
-- RAG pipelines
+- efficient RAG pipelines
+- semantic vector retrieval
+- hybrid retrieval + fallback reasoning
 - FastAPI backend architecture
-- structured outputs
+- structured AI outputs
 - validation and retries
-- scalable AI engineering
+- confidence-aware AI responses
+- scalable AI engineering workflows
 
-This project showcases strong understanding of modern AI system design and production-ready backend architecture.
+This project showcases strong understanding of modern AI system design, retrieval engineering, production-oriented LLM architecture, and adaptive AI application development.
