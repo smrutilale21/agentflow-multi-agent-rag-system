@@ -8,6 +8,19 @@ The platform also includes hybrid RAG + LLM fallback handling, enabling graceful
 
 ---
 
+# 🌐 Live Deployment
+
+## Frontend (Streamlit)
+https://agentflow-api-frontend.streamlit.app/
+
+## Backend API (Render)
+https://agentflow-api-backend.onrender.com/research
+
+## Swagger API Docs
+https://agentflow-api-backend.onrender.com/docs
+
+---
+
 # 🚀 Overview
 
 This system uses a modular multi-agent architecture to process user research queries through multiple intelligent stages:
@@ -395,7 +408,7 @@ uvicorn main:app --host 0.0.0.0 --port 10000
 Add environment variable:
 
 ```text
-BACKEND_URL=https://your-render-url.onrender.com/research
+BACKEND_URL=https://agentflow-api-backend.onrender.com/research
 ```
 
 ---

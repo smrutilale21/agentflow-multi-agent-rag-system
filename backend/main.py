@@ -1,28 +1,19 @@
 from fastapi import FastAPI, Form
 from fastapi.middleware.cors import CORSMiddleware
-
 from graph import build_graph
-
 from logger import setup_logger
 
 logger = setup_logger()
 
-app = FastAPI(
-    title="AgentFlow API"
-)
+app = FastAPI(title="AgentFlow API")
 
 
 app.add_middleware(
-
     CORSMiddleware,
-
     allow_origins=["*"],
-
     allow_credentials=True,
-
     allow_methods=["*"],
-
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 
@@ -31,22 +22,15 @@ def health_check():
 
     logger.info("Health check endpoint called")
 
-    return {
-        "status": "running"
-    }
+    return {"status": "running"}
 
 
 @app.post("/research")
-async def research(
-
-    query: str = Form(...)
-):
+async def research(query: str = Form(...)):
 
     try:
 
-        logger.info(
-            f"Received query: {query}"
-        )
+        logger.info(f"Received query: {query}")
 
         graph = build_graph()
 
@@ -62,26 +46,12 @@ async def research(
             }
         )
 
-        logger.info(
-            "Research completed successfully"
-        )
+        logger.info("Research completed successfully")
 
-        return {
-
-            "success": True,
-
-            "result": result
-        }
+        return {"success": True, "result": result}
 
     except Exception as e:
 
-        logger.error(
-            f"Research endpoint failed: {e}"
-        )
+        logger.error(f"Research endpoint failed: {e}")
 
-        return {
-
-            "success": False,
-
-            "error": str(e)
-        }
+        return {"success": False, "error": str(e)}

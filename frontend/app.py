@@ -1,22 +1,12 @@
-import streamlit as st
-import requests
 import os
 
+import requests
+import streamlit as st
 
-BACKEND_URL = os.getenv(
-
-    "BACKEND_URL",
-
-    "http://127.0.0.1:8000/research"
-)
+BACKEND_URL = os.getenv("BACKEND_URL", "http://127.0.0.1:8000/research")
 
 
-st.set_page_config(
-
-    page_title="AgentFlow API",
-
-    layout="wide"
-)
+st.set_page_config(page_title="AgentFlow API", layout="wide")
 
 
 # =========================
@@ -46,35 +36,25 @@ with st.sidebar:
 
     st.title("⚡ AgentFlow API")
 
-    st.caption(
-        "Multi-Agent Research Platform"
-    )
+    st.caption("Multi-Agent Research Platform")
 
-    st.info(
-        """
+    st.info("""
         Workflow:
         
         Query → Planner Agent
         → Retriever Agent
         → Research Agent
         → Fallback Logic
-        """
-    )
+        """)
 
     st.divider()
 
-    st.subheader(
-        "📌 Sample Questions"
-    )
+    st.subheader("📌 Sample Questions")
 
     sample_questions = [
-
         "How are AI agents transforming enterprise automation?",
-
         "Applications of AI agents in business intelligence systems",
-
         "Future of multi-agent AI systems in healthcare and finance",
-
         "Challenges in building scalable multi-agent architectures",
     ]
 
@@ -86,57 +66,32 @@ with st.sidebar:
 
     st.divider()
 
-    st.subheader(
-        "🕘 Run History"
-    )
+    st.subheader("🕘 Run History")
 
     if st.session_state.history:
 
-        for idx, item in enumerate(
-            st.session_state.history
-        ):
+        for idx, item in enumerate(st.session_state.history):
 
-            display_text = (
+            display_text = item[:60] + "..." if len(item) > 60 else item
 
-                item[:60] + "..."
-
-                if len(item) > 60
-
-                else item
-            )
-
-            if st.button(
-
-                f"{idx + 1}. {display_text}",
-
-                key=f"history_{idx}"
-            ):
+            if st.button(f"{idx + 1}. {display_text}", key=f"history_{idx}"):
 
                 st.session_state.selected_question = item
 
     else:
 
-        st.info(
-            "No research runs yet"
-        )
+        st.info("No research runs yet")
 
 
 # =========================
 # Main UI
 # =========================
 
-st.title(
-    "🧠 AgentFlow API — Multi-Agent Research Platform"
-)
+st.title("🧠 AgentFlow API — Multi-Agent Research Platform")
 
 
 query = st.text_area(
-
-    "Enter Research Query",
-
-    value=st.session_state.selected_question,
-
-    height=150
+    "Enter Research Query", value=st.session_state.selected_question, height=150
 )
 
 
@@ -145,35 +100,18 @@ if st.button("Run Research"):
     if query:
 
         with st.spinner(
-
-            "Planner Agent → Retriever Agent "
-            "→ Research Agent running..."
+            "Planner Agent → Retriever Agent " "→ Research Agent running..."
         ):
 
             try:
 
-                response = requests.post(
-
-                    BACKEND_URL,
-
-                    data={
-                        "query": query
-                    },
-
-                    timeout=60
-                )
+                response = requests.post(BACKEND_URL, data={"query": query}, timeout=60)
 
                 result = response.json()
 
                 if not result.get("success"):
 
-                    st.error(
-
-                        result.get(
-                            "error",
-                            "Unknown error occurred"
-                        )
-                    )
+                    st.error(result.get("error", "Unknown error occurred"))
 
                     st.stop()
 
@@ -183,12 +121,7 @@ if st.button("Run Research"):
                 # Save History
                 # =========================
 
-                st.session_state.history.insert(
-
-                    0,
-
-                    query
-                )
+                st.session_state.history.insert(0, query)
 
                 # =========================
                 # Create Download Report
@@ -232,39 +165,23 @@ Confidence
                 # Display Results
                 # =========================
 
-                st.success(
-                    "Research Completed"
-                )
+                st.success("Research Completed")
 
                 # =========================
                 # Metrics Row
                 # =========================
 
                 fallback_used = (
-
-                    "Fallback response generated"
-
-                    in result["research_notes"]
+                    "Fallback response generated" in result["research_notes"]
                 )
 
                 col1, col2, col3 = st.columns(3)
 
-                col1.metric(
-                    "Documents Retrieved",
-                    3
-                )
+                col1.metric("Documents Retrieved", 3)
 
-                col2.metric(
-                    "Confidence",
-                    result["confidence"]
-                )
+                col2.metric("Confidence", result["confidence"])
 
-                col3.metric(
-
-                    "Fallback Used",
-
-                    "Yes" if fallback_used else "No"
-                )
+                col3.metric("Fallback Used", "Yes" if fallback_used else "No")
 
                 st.divider()
 
@@ -274,13 +191,9 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Refined Query"
-                    )
+                    st.subheader("Refined Query")
 
-                    st.write(
-                        result["refined_query"]
-                    )
+                    st.write(result["refined_query"])
 
                 # =========================
                 # Retrieved Context
@@ -288,17 +201,11 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Retrieved Context"
-                    )
+                    st.subheader("Retrieved Context")
 
-                    with st.expander(
-                        "View Retrieved Context"
-                    ):
+                    with st.expander("View Retrieved Context"):
 
-                        st.write(
-                            result["retrieved_context"]
-                        )
+                        st.write(result["retrieved_context"])
 
                 # =========================
                 # Research Notes
@@ -306,13 +213,9 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Research Notes"
-                    )
+                    st.subheader("Research Notes")
 
-                    st.write(
-                        result["research_notes"]
-                    )
+                    st.write(result["research_notes"])
 
                 # =========================
                 # Final Answer
@@ -320,13 +223,9 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Final Answer"
-                    )
+                    st.subheader("Final Answer")
 
-                    st.write(
-                        result["final_answer"]
-                    )
+                    st.write(result["final_answer"])
 
                 # =========================
                 # Sources
@@ -334,17 +233,11 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Sources"
-                    )
+                    st.subheader("Sources")
 
-                    with st.expander(
-                        "View Sources"
-                    ):
+                    with st.expander("View Sources"):
 
-                        st.write(
-                            result["sources"]
-                        )
+                        st.write(result["sources"])
 
                 # =========================
                 # Confidence
@@ -352,29 +245,21 @@ Confidence
 
                 with st.container(border=True):
 
-                    st.subheader(
-                        "Confidence"
-                    )
+                    st.subheader("Confidence")
 
                     confidence = result["confidence"]
 
                     if confidence == "High":
 
-                        st.success(
-                            "High Confidence"
-                        )
+                        st.success("High Confidence")
 
                     elif confidence == "Medium":
 
-                        st.warning(
-                            "Medium Confidence"
-                        )
+                        st.warning("Medium Confidence")
 
                     else:
 
-                        st.error(
-                            "Low Confidence"
-                        )
+                        st.error("Low Confidence")
 
                 # =========================
                 # Download Report
@@ -382,31 +267,21 @@ Confidence
 
                 st.divider()
 
-                st.subheader(
-                    "⬇ Download Report"
-                )
+                st.subheader("⬇ Download Report")
 
                 if st.session_state.download_report:
 
                     st.download_button(
-
                         label="Download Latest Report",
-
                         data=st.session_state.download_report,
-
                         file_name="research_report.txt",
-
-                        mime="text/plain"
+                        mime="text/plain",
                     )
 
                 else:
 
-                    st.info(
-                        "Run research first"
-                    )
+                    st.info("Run research first")
 
             except Exception as e:
 
-                st.error(
-                    f"Frontend error: {e}"
-                )
+                st.error(f"Frontend error: {e}")
