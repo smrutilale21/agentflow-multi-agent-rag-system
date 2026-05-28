@@ -105,7 +105,9 @@ if st.button("Run Research"):
 
             try:
 
-                response = requests.post(BACKEND_URL, data={"query": query}, timeout=60)
+                response = requests.post(
+                    BACKEND_URL, data={"query": query}, timeout=180
+                )
 
                 result = response.json()
 
