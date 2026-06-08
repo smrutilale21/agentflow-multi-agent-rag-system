@@ -191,7 +191,7 @@ for a cleaner and more professional product experience.
 - Added hybrid retrieval + fallback reasoning workflow
 - Built semantic retrieval system using ChromaDB
 - Integrated OpenAI embeddings for vector search
-- Developed FastAPI backend for scalable API-first deployment
+- Developed FastAPI backend for scalable API-first deployment and containerized it using Docker for consistent deployment and dependency isolation
 - Added confidence-aware response handling
 - Implemented structured output validation and retries
 - Added workflow observability through centralized logging
@@ -208,8 +208,9 @@ for a cleaner and more professional product experience.
 - LangGraph
 - LangChain
 - ChromaDB
-- OpenAI API
+- OpenAI API & Embeddings
 - Pydantic
+- Docker
 
 ---
 
@@ -232,6 +233,8 @@ agentflow-api/
 │   ├── llm.py
 │   ├── config.py
 │   ├── requirements.txt
+│   ├── Dockerfile
+│   ├── .dockerignore
 │   └── .env
 │
 ├── frontend/
@@ -358,10 +361,47 @@ cd backend
 uvicorn main:app --reload
 ```
 
-Backend runs at:
+Local backend available at:
 
 ```text
 http://127.0.0.1:8000
+```
+
+---
+
+# 🐳 Docker Setup
+
+## Build Docker Image
+
+```bash
+cd backend
+
+docker build -t agentflow-api .
+```
+
+---
+
+## Run Docker Container
+
+```bash
+docker run -p 8000:8000 \
+-e OPENAI_API_KEY=your_api_key_here \
+-e OPENAI_MODEL=gpt-4o-mini \
+agentflow-api
+```
+
+Dockerized backend available at:
+
+```text
+http://localhost:8000
+```
+
+---
+
+## Swagger API Docs
+
+```text
+http://localhost:8000/docs
 ```
 
 ---
@@ -417,11 +457,13 @@ BACKEND_URL=https://agentflow-api-backend.onrender.com/research
 
 - ChromaDB files are excluded from Git
 - `.env` is ignored for security
-- Logs are stored locally
+- Logs are stored locally for workflow observability and debugging
 - Frontend and backend are independently deployable
 - Existing production workflow remains modular and extensible
 - Multi-document ingestion is supported automatically
 - Retrieval-aware fallback handling improves robustness
+- FastAPI backend is containerized using Docker for portable and reproducible deployment
+
 
 ---
 
@@ -450,6 +492,6 @@ AgentFlow API demonstrates a robust implementation of:
 - structured AI outputs
 - validation and retries
 - confidence-aware AI responses
-- scalable AI engineering workflows
+- scalable and containerized AI engineering workflows
 
 This project showcases strong understanding of modern AI system design, retrieval engineering, production-oriented LLM architecture, and adaptive AI application development.
